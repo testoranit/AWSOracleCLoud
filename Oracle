@@ -1,0 +1,49 @@
+![Benefits of CLoud computing](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/658a52d2-288d-45f2-af47-0ce563268e2f)
+
+AWS reinvent check on portal:- AWS announcements on ifeerent services.
+
+AWS GLobal Infra:-
+****
+(Region and a Availaibilty zone)
+(Region:- geogrphalica area, US,EUrope)
+(AZ:- dc)
+
+33 geo regions and 105 AZ's
+
+AZ in a region:- are conneted to with each other with low latency,high throughput,failover)
+Elastic Ip;-
+A Public IP address of an instance will change if this one is stopped. However, if you require a persistent Public IP address that can be assigned to and removed from instances, use an Elastic IP address instead.
+
+S3:-store data as an object.
+reterive any amount of data from anywhere
+durabilibity:- 99.999999%%
+
+Data Lake:_ single store of all enterprise data.
+
+AWS Instance Types;_
+General purpose:-for scale out of workloads such as webservers, containerized microservices as well as dev env's
+COmpute optimized:- compute itensive workloads,distributed processing,high performance,
+Mem optimized:- high perf db,in-mem,big data.
+Accelerated computing:- uses GPU :- machine learning, deep learnin.
+storage optimized:- distributed file systems,apachekafka.
+
+Lab:_
+Create EC2,
+attach a volume to the server
+
+fdisk -l
+fdisk /dev/sdf
+n
+p
+1
+
+
+ss
+
+mkfs -t ext4 /dev/sdf1
+mkdir /u01
+mount /dev/sdf1 /u01
+df -h
+vi /ect/fstab
+/dev/sdf1 /u01 defaults 0 0
+
