@@ -47,3 +47,78 @@ df -h
 vi /ect/fstab
 /dev/sdf1 /u01 defaults 0 0
 
+Oracle secure backup:- configure
+configure backup to s3
+rman take backup to s3 and also u can restore it.
+
+
+
+****RDS
+setup,operate,& scale a relation db
+lot of mundane dba taska are automated.
+automatically take backup of db's
+scale compute resorce,sstorage
+
+***AMAZON RDS for oracle
+Covered 2 licensing moddels:- BYOL, Licesnec included.
+versions available 11g(11.2.04, 12c)
+preconfigured paramaters.
+aws cloudwatch to monitor db
+Automated backups:_ PIT recovery.
+Database snapsots:- user initated backups.
+Scale compute and memory resources
+Multi AZ deployments:- 
+RDS can be created in specific VPC.
+SUpports TDE
+Standard edition,stanadard edition 1,2 enterprise dition.
+Oracle RAC is not supporteed on RDS.
+Managng time-consuming dba admn taska are done by AWS.
+CLoud wants DBA to foucs on APp optimization.
+
+![Oracle RDS respo](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/0a690c83-e072-47b9-906b-513194b3a946)
+
+*********************
+Understanding Backup and Recovery in RDS.
+backup's and recovery not actually in dba's control.
+Automated backup's during the backup window.
+u don't do rman backup's backup's are done using storage volume snapshot instead of individual databases.
+Allowed to do manual backups using create snapshos.
+SInle AZ db instance results in a breif I/O suspension, hence it is adivsable to do it on dev tess env and not on Prod.
+for Prod go with Multi AZ and offload the backups from standby db.
+The first snapshot contains data for full db instance.
+rest are incrmentals.
+A new instance created at the time of restore.
+A new instance can be created Point in time.
+RDS uploads transaction logs of DB instances to S3 every 5 mins.
+
+
+* U need to have subnet group for creating a RDS
+so in VPC where u have 1 Public subnet and 1 Private subnet 
+create 1 more Private subnet in different AZ other then the AZ of 1st Private Subnet.
+1)Once it is created got to RDS and create subnet groups and choose 2 Private subnets.
+
+Provision an RDS instance for Oracle.
+choose only private subnets in the subnet groups.
+
+
+MOnitoring RDS
+AWS CLoudwatch
+gathers metrics CPU utlilisation of the hypervisor.
+collects and processes raw data from AMAZON RDS into readable,near real time metrics.
+historical stats is done but u can do a near real time.
+stats are recorded for more then 2 weeks
+metrics is send over a period of 1 min
+configure ur RDS engine to publish log data to log group.
+
+ENhanced monitoring.
+gatheres metrcis  from an agent on the instance.
+which process is taking more time on CPU
+more cost.
+u can do it at intital stage or later
+do not need a restart
+enhanced metrics are send to cloudwatch  log Grops(RDSOSMETRICS)
+
+RDS Monitoring:- See CLoudwatch 
+also see logs and events under RDS.
+U can also create alarms
+to email
