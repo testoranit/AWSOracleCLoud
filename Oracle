@@ -122,3 +122,73 @@ RDS Monitoring:- See CLoudwatch
 also see logs and events under RDS.
 U can also create alarms
 to email
+
+*****
+create a manual snapshot of db
+it doesn't do rman backups, it takes storage snapshots.
+when u take these snapshots(backup of db, there is an I/o suspension) so it is recommended to do the backups on stanby site of prod server.
+or
+enable Multi-az deployments.
+takesnapshot.
+
+********Restore a db from RDS.
+go to snapnshots-->restore snapshot
+unline tradition way where there is an issue on prod u can do restore and recovery on prod iteself.
+But with AWS RDS you have to create a new db from the available snapshots..can't do recovery on primary db.
+
+
+*************DB patching in RDS.
+go to console of db and modify to the latest PSU.
+u can schedule the patch update or do it immediately..it will cause downtime.
+
+
+
+
+Patching Oracle Database in Amazon RDS (Relational Database Service) involves using the AWS Management Console or the AWS CLI. Unlike patching a standalone Oracle Database installation where you have direct access to the server, patching an Oracle RDS instance is managed through AWS.
+
+Here's an overview of the steps involved in patching an Oracle RDS instance:
+
+1. **Determine the Patch Version**: Check the Oracle documentation or AWS RDS documentation to determine the latest available patch version for your Oracle RDS instance.
+
+2. **Schedule Maintenance Window**: Patching an RDS instance requires a maintenance window during which the instance can be rebooted. Use the AWS Management Console or AWS CLI to schedule a maintenance window that suits your requirements.
+
+3. **Apply the Patch Using the AWS Management Console**:
+   - Log in to the AWS Management Console.
+   - Navigate to the Amazon RDS dashboard.
+   - Select your Oracle RDS instance.
+   - Under "Instance actions" or "Modify", select "Modify".
+   - Choose the desired DB Engine Version (patch version) from the dropdown menu.
+   - Confirm the modification and apply the changes.
+
+4. **Apply the Patch Using the AWS CLI**:
+   - Use the `modify-db-instance` command with the `--engine-version` parameter to specify the desired patch version.
+   - Example AWS CLI command:
+     ```bash
+     aws rds modify-db-instance --db-instance-identifier your-db-instance-name --engine-version new-patch-version --apply-immediately
+     ```
+   - Replace `your-db-instance-name` with the identifier of your RDS instance and `new-patch-version` with the desired patch version.
+
+5. **Monitor the Patching Process**: Once the patching process begins, monitor the status of your RDS instance using the AWS Management Console or AWS CLI.
+
+6. **Verify the Patch**: After the maintenance window is complete and the instance is back online, verify that the patch has been successfully applied. You can check the Oracle version to confirm.
+
+Remember, when you schedule a maintenance window for patching an RDS instance, it will be rebooted during that time, causing temporary downtime. Ensure that you plan the maintenance window during off-peak hours to minimize the impact on your applications.
+
+Always refer to the latest AWS RDS documentation and guidelines for the most accurate and up-to-date instructions on patching Oracle RDS instances.
+
+In the background.
+before doing patching AWS creates a snapshot of db before and after patch.
+if something goes wrong it will use this snapshot to recover the db.
+
+****************
+![#tier arch](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/85338c5c-fd06-43e9-bcce-58413057cbf6)
+
+U can execute few commands.
+alter database tabpescace resize NA instead use alter tablespaces
+![RDS commands](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/50fee775-79ad-4409-8024-2fbe1465157d)
+
+READ IT
+https://aws.amazon.com/blogs/database/migrate-from-oracle-rac-to-aws-alternatives-on-aws/
+
+
+
