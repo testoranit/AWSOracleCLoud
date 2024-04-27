@@ -1,0 +1,38 @@
+Oracle on Ec2 migration to AWS RDS.
+
+expdp of source schema
+(schema level and object level migartion possible, but you can' to full db migration using datapump since you don't have access to SYS schema of AWS RDS)
+
+create db link on source
+CREATE DATABASE LINK RDSPDB
+CONNECT TO admin IDENTIFIED BY tsgsupportkey
+USING '(DESCRIPTION=
+          (ADDRESS=(PROTOCOL=TCP)(HOST=rdspdb.crit5ered0ee.us-east-1.rds.amazonaws.com)(PORT=1521))
+          (CONNECT_DATA=(SID=ORCL)))';
+
+Transfer the dumpfile to AWS RDS(AWS RDS is also hosted on EC2 in the background)
+BEGIN
+DBMS_FILE_TRANSFER.PUT_FILE(
+source_directory_object => 'data_pump_dir',
+source_file_name => 'expdpsam_user26apr.dmp',
+destination_directory_object => 'DATA_PUMP_DIR',
+destination_file_name => 'expdpsam_user26apr.dmp',
+destination_database => 'RDSPDB' );
+END;
+/
+
+and then do impdp
+impdp admin@rdspdb DIRECTORY=DATA_PUMP_DIR dumpfile=expdpsam_user26apr.dmp logfile=expdp27apr.log remap_schema=sam_user:sam_user remap_tablespace=SAMP_T:USers
+
+
+The dump file on RDS server takes space and this space is counted towards RDS usage. Its a good idea to delete this dump file
+
+On RDS:
+=======
+exec utl_file.fremove('DATA_PUMP_DIR','expdpsam_user26apr.dmp');
+
+Import the dump file (which is not available on RDS server) into RDS. You run the impdp on source server on RDS via oracle networking
+
+On source:
+==========
+impdp admin@rdspdb DIRECTORY=DATA_PUMP_DIR dumpfile=scott.dmp logfile=import.log
