@@ -1,3 +1,12 @@
+6 R's of Migration.
+1)Rehost:- eg:- migrate vm to cloud and do some changes(do it manual or automatic(using cloud Migration service)
+2)Replatform eg:- when u migrate a db or SaaS
+3)Repurchase
+4)Refactor-Rearchitect
+5)Retain
+6)Retire
+
+
 Oracle on Ec2 migration to AWS RDS.
 
 expdp of source schema
