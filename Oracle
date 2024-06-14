@@ -130,6 +130,28 @@ when u take these snapshots(backup of db, there is an I/o suspension) so it is r
 or
 enable Multi-az deployments.
 takesnapshot.
+Snapshots(are full and not incremental)
+
+You can copy the sanpshots from 1 region to another, so that db can moved from 1 region to anothrrt.
+RDS proxy:- could be used for failover,caching,secutiy
+
+u can covert a rds instance to multi az db rds
+
+Multi-AZ DNS is same for prim ans standby
+each read replica can have unique dns addresses.
+
+when u want to create a read replica, a snapshot of prim is taken so take it from standby.
+upto 5 read replicas (croos az-cross-region)
+Once a read replica is promoted it's no longer a read replica its relathinship with primary db is broken.
+so now db can go for certain data in the original master and certain data in the new master which is now an independent db.This is called sharding.
+
+Automatic backup required is a pre-req for read replicas
+
+u can setup multi az read replicas(just like multi az rds)
+Master read replica in 1 region and standby read replica in another region both having the same DNS.
+
+
+
 
 ********Restore a db from RDS.
 go to snapnshots-->restore snapshot
@@ -190,5 +212,32 @@ alter database tabpescace resize NA instead use alter tablespaces
 READ IT
 https://aws.amazon.com/blogs/database/migrate-from-oracle-rac-to-aws-alternatives-on-aws/
 
+IMP**********
+AWS RDS with Multi az:- automatic failover possible.
+AWS RDS with read replicas:- automatic failover not possible.
+AWS RDS with Aurora read replicas:- automatic failover possible.
+
+*****
+
+******Aurora
+AWS-only rds
+hevily optimized to outperform traditional harware solutions.
+Mysql or Postgres compatible.
+supports upto 15 read replicas
+automatic failover in 1 min
+Aurora lobal dabase which cn be spread across regions.
+It uses the concept of cluster volumes(which is spread across multiple AZ's)
+so if primart write data to cluster volume of it's az it will write it to other az's cluster volume as well.
+so there is no need to take a snapshot and then create a read replica, the read replica can be created and directly sccess data from clsuter volume.
+![Aurora](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/ab877f23-5782-4d9c-ae93-6999450da254)
+
+Also Master can failover to Read replica in aurora db.
+You have Cluster endpoint which has intelligence to  route write traffic to prim db and reads to read replics'
+there is also a reader endpoint:-for reads to read replicas.
+
+**Aurora storage and caching**
+I/o Optimized
+I/o standard
+u can swicth between these storage classes.
 
 
