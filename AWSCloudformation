@@ -1,0 +1,8 @@
+1)AWSTemplateFormatVersion:- version of AWS cf template.
+2)Desciption(o):-
+3)Metadata(o):- additonal info about ur template.
+4)Paramaters(o):-to pass calues in runtime while creating or updating ur stacks.
+U can refrence this parameteres in recource and output section.
+5)Rules(0):- used to validate ur parameter values during stack creation or updates with assertions in ur templates.
+(eg if env paramater is dev then inctance type should be t2.micro)
+
