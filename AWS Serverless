@@ -1,0 +1,56 @@
+Rajdeep saha
+Serverless:_ you only pay for execution and not for the physical server.
+No servers (pysical or vitual)
+Auto scale with usage.
+Never pay for idle.
+Availibilty and fault tolerance build in(in more then 1 az)
+
+In traditional way where u use Ec2 u have to rehydrate ur ami's for security patches and hydrate it again, this is also painful.
+
+Compute:_ lambda, Fargate
+storage:- AUrora severless, dynamodb, amazon s3
+
+Integration & Analytics:- Amazon api gateway, Amazon SQS, AWS Stepfunctions, AWS Glu, SNS, APPSync
+
+SOme more details abot lambda:-
+
+Select memory from 128 to 10Gb
+CPU and network allocated proportinally
+max runtime 15 mins
+
+Cost:-
+every month u get 1M invocations and 400,000 GB of compute
+charged in 1 ms increments
+no commmitment required, no cost for being idle.
+
+Lab:-
+First lambda
+create lambda function,choose runtime, heello world.
+go to lambda function:- def lambda_handler(event,context) <--evnt is the thing that is served as an input, context is more info)
+add:-
+print(event)
+print(context)
+
+click on deploy and test--> give vaues as India,usa,denmark etc.
+
+lab2:-
+create a lambda for s3 trigger use buleprint template for creating Lambda
+give input to lamba event accordingly name of s3 bucket,
+
+
+*********API Gateway in real world
+
+API:- a mediator for communicaion or a call madde to an entity.
+
+Lab:- API GAteway calling a Lambda
+
+create a Hello world lambda
+create a API gateway with Get method and deploy the api gateway
+get the API gateway URL and paste it in browser
+
+Lab2:-
+create a new lambda function
+which says Hello from input country
+add Post method in above API gateway and pass input deploy this
+since through browser u can inly invoke get method for post method u need postman.
+
