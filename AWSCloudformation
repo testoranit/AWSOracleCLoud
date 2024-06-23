@@ -5,4 +5,161 @@
 U can refrence this parameteres in recource and output section.
 5)Rules(0):- used to validate ur parameter values during stack creation or updates with assertions in ur templates.
 (eg if env paramater is dev then inctance type should be t2.micro)
+6)Mappings(opt):- 2 level key value pairs
+7)Condition(opt):- 
+8)Transorm(opt):- transform ur template
+9)Resources(mand):- max 500 resources
+10)Output(opt):-
+11)DependsOn(opt):-
+
+YAML uses indentation levels.
+**First Yaml template
+AWSTemplateFormatVersion: 2010-9-09
+Description: My first AWS Template
+Resources:
+  WebServerInstance:   <--Tis is logical id or varibale name u can say
+    Type: AWS::EC2::Instance              <-- Serviceprovidername::Service-name::data-type check AWS documentation.
+    Properties:                          <-- Properties of the instance.
+      ImageId: give an ami id.
+      InstanceType: t2.micro
+      SubnetId: paste subnet id
+      Tags:
+        - Key: Name
+          Value: web-server
+        - Key: Project
+          Value: AWS CLoudformation step by step.
+
+Now go to console.. and create stack and uplod the above file.
+
+Incase u gorget anything while creatin above template
+
+AWSTemplateFormatVersion: 2010-9-09
+Description: My first AWS Template
+Resources:
+  WebServerInstance:   <--Tis is logical id or varibale name u can say
+    Type: AWS::EC2::Instance              <-- Serviceprovidername::Service-name::data-type check AWS documentation.
+    Properties:                          <-- Properties of the instance.
+      ImageId: give an ami id.
+      InstanceType: t2.micro
+      SubnetId: paste subnet id
+      Tags:
+        - Key: Name
+          Value: web-server
+        - Key: Project
+          Value: AWS CLoudformation step by step.
+
+  WebServerSecurityGroup:
+    Type:AWS::EC2::SecurityGroup
+    Properties:
+      GroupDesciption:Sec group for web servers.
+      VpcId:paste vpc id
+      SecurityGroupIngress:
+        -  IpProtocol: tcp
+           FromPort: 80
+           ToPort: 80
+           CidrIp: '0.0.0.0/0'
+
+ot to console and update the stack.
+
+The above security group and ec2 are created separately since the sg is not yet attached to ec2 instance
+so u need to use Ref Function.
+
+AWSTemplateFormatVersion: 2010-9-09
+Description: My first AWS Template
+Resources:
+  WebServerInstance:   <--Tis is logical id or varibale name u can say
+    Type: AWS::EC2::Instance              <-- Serviceprovidername::Service-name::data-type check AWS documentation.
+    Properties:                          <-- Properties of the instance.
+      ImageId: give an ami id.
+      InstanceType: t2.micro
+      SubnetId: paste subnet id
+      SecurityGroupIds:-           <--Get it from AWS doc SG property)
+        - !Ref WebServerSecurityGroup
+      Tags:
+        - Key: Name
+          Value: web-server
+        - Key: Project
+          Value: AWS CLoudformation step by step.
+
+  WebServerSecurityGroup:
+    Type:AWS::EC2::SecurityGroup
+    Properties:
+      GroupDesciption:Sec group for web servers.
+      VpcId:paste vpc id
+      SecurityGroupIngress:
+        -  IpProtocol: tcp
+           FromPort: 80
+           ToPort: 80
+           CidrIp: '0.0.0.0/0'
+
+
+save file and updte the stack in console.
+
+*************
+Now lab with VP,subnet,IG,RT,EC2,SG.
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: Section 2 activity solution template
+Resources:
+  ActivityVpc:
+    Type: AWS::EC2::VPC
+    Description: Section 2 activity VPC definition
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        -
+          Key: Name
+          Value: Section2ActivityVPC
+  ActivitySubnet:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref ActivityVpc
+  ActivityRouteTable:
+    Type: AWS::EC2::RouteTable 
+    Properties:
+      VpcId: !Ref ActivityVpc
+  ActivityInternetGateway:
+    Type: AWS::EC2::InternetGateway
+  ActivityGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref ActivityVpc
+      InternetGatewayId: !Ref ActivityInternetGateway
+  InternetRoute:
+    Type: AWS::EC2::Route 
+    DependsOn:
+      - ActivityGatewayAttachment
+    Properties:
+      RouteTableId: !Ref ActivityRouteTable
+      GatewayId: !Ref ActivityInternetGateway
+      DestinationCidrBlock: 0.0.0.0/0
+  ActivitySubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref ActivityRouteTable
+      SubnetId: !Ref ActivitySubnet
+  ActivityInstance:
+    Type: AWS::EC2::Instance 
+    DependsOn:
+      - InternetRoute
+      - ActivitySubnetRouteTableAssoc
+    Properties:
+      InstanceType: t2.micro
+      SubnetId: !Ref ActivitySubnet 
+      ImageId: ami-0fad7378adf284ce0
+      SecurityGroupIds:
+        - !Ref ActivitySecurityGroup
+  ActivitySecurityGroup:
+    Type: AWS::EC2::SecurityGroup 
+    Properties:
+      GroupDescription: Activity security group 
+      VpcId: !Ref ActivityVpc
+      SecurityGroupIngress:
+        -
+          CidrIp: 0.0.0.0/0 
+          IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
 
