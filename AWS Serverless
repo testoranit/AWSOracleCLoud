@@ -54,3 +54,37 @@ which says Hello from input country
 add Post method in above API gateway and pass input deploy this
 since through browser u can inly invoke get method for post method u need postman.
 
+INstall postman and login and copy the post url from above api gateway
+and paste it in postman
+give body as {
+"Country":"France"
+}
+
+you now post it and see the output.
+*******************
+API Gateway query parameters
+
+https://url:/xyz? abc=something (after? abc=something is query parameter)
+so u can see everything in url
+So post is more secure then GET, for post u need message body to give as input.
+
+use the same lambda function which takes ip s country name.
+
+create an API gatewway above this time add a query paremeter nameofCOuntry checkemard=yes and request validation.
+if there is no ip for query parameer it gives an error. also the query paremeer doesn't know
+which lambda function to call..so got to Integrations and mappings and then mentione the query prameter variable as ip.
+
+go to postman and hit the api url with ?nameofCOuntry=Europe
+
+u see the output.
+
+**AWS cross account API
+u can do it just copy the full arn of the lamdba from other account and mention it in the api gateway account of the first account.
+u will have to give certain permissions..just run that permission command in aws cli of second account.
+
+*************
+Lambda version and alias for api  traffic splitting 
+
+
+
+
