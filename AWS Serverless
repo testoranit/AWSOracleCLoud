@@ -84,6 +84,156 @@ u will have to give certain permissions..just run that permission command in aws
 
 *************
 Lambda version and alias for api  traffic splitting 
+Lambda can have versions Lambda 1 , lambda 2,lambda 3 now lambda 3 is the latest
+lambda is an alias which can point to version of lambda.
+It can point to multiple versions of lambda.
+AP Gateway -->alias__--(50%) traffic to lambda 1 and 50% traffic to lamba 2, you can do that.
+so u can do blue green design using this.
+lab:- create a lamba1 version which hello world version 1 , then do it for other lambda versions.
+Now create alias
+so in API gateway config set alias name of lambda
+
+*****************
+API endpoints types
+1)Edge optimised:- helps in reducing client latency from anywhere n the internet.
+2)Regional:- designed to reduce latency when calls are made from the same region as the API.
+3)Private:- Desined to expose APIS only inside ur VPC.
+
+U can change endpoint type anytime.
+API Gateway also has caching mecanism, u can see it using cloudwatch if the request comes from the caching.
+
+
+********************RDS Proxy
+
+users-->API Gateawy-->Lambda-->RDS
+if traffic increased api agteway and lamnda can scale up but not RDS
+Since RDS has connection liminit.
+let's say lambda connects to RDS and does it job and the lambda stops 
+the connection is still there, and if another lambda comes up it creates new connection, and not used previous
+connection,
+it exhauts the memory and compur process.
+also another process could access rds and not able to get connection.
+
+so  use rds prox
+so here RDS proxy can sit here beween lambda and RDS.
+users-->API Gateway-->Lambda-->RDS proxy-->RDS.
+
+RDS proxy :- highly Available,allows applications to share pool of db connections.also allows to reuse orphan connections.
+failover  without DNS change,66% reduced failover time for aurora,RDS
+allocate how many connections lambda allowed to used.
+
+**********AWS Step functions
+**************AWS Storage for serverless.
+![Nosql](https://github.com/testoranit/AWSOracleCLoud/assets/124513439/586fc088-14ad-4dab-a3cf-8c9f459de9e0)
+
+SYnamo DB
+fully managed nosql db
+store uge amount of data
+can serve any level of request traffic.
+autoscale itself.
+HA and durable.
+Muli region and Multi master db using global tables.
+
+table=like rbdms table
+item in dynamo db= similar to row in rdbms table
+atrribute is like a column in rdbms table an item cn have mutliple attributes or extra attribues.
+
+an item is uniuqe in dynao db table which is identified uniquely by an attribyte in each item like empid)
+
+u can have combo like (deptid,deptname) which can also be uniquely identified in dynamo db.
+
+dynamo db can have
+primary key
+partition key:- identified the uniquenes off each item like empid.
+Partitionkey and sort key:- refeered as composite key , has 2 attributes , 1 is te partiton key and the other is sort key.
+No 2 items can have the same combo of these 2 attributes.(deptid,deptname)
+
+Dyanmo db secondary index.
+it lets u query the data in the table using an alternate key, in addition to queries against the prim key.
+like where u want to fetch data other then the partiton key .
+
+Global sec index:- an index with part key and sort key  that can be different   from those on the table.
+Local sec index:- An index that has the same partition key as the tables,but a different sort key.
+
+eg:- Emp table
+empid: 1
+dept id: 10
+ename:abc
+dname:xyz
+
+empid: 2
+dept id: 20
+ename:efg
+dname:lmn
+
+here emp id is partition key, sort key is dept id:-
+while quering u can use empid and/or dept id OR ename and/OR dname
+this is gloabl sec index.
+
+********Global tables
+used for HA and low latency, it comes with extra cost.AWS takes care of replication accross regions.
+
+************Read consistency and write capacity.
+Dynamo db is multi-az enabled, data is replicated accross multiple AZ.
+
+eg:-
+AZ1
+Emp table
+empid: 1
+dept id: 10
+ename:abc
+dname:qwe
+
+Az2
+Emp table
+empid: 1
+dept id: 10
+ename:abc
+dname:xyz
+
+Az3
+Emp table
+empid: 1
+dept id: 10
+ename:abc
+dname:xyz
+
+Now the data is replicated accross multi-az, but let's say  the item is updated in 1 if there is a read by another user he may et old data from other az
+so this is due to eventual consistent reads.
+u cn have srong consistency reads, this is used for real time data  consistency.
+
+Dynamo db reads and writes.
+throughput is measured through capacity units
+
+1 read capacity unit
+means 1 strong consistenc read per second.
+2 eventul consistent read per second.
+for item upto 4 kb in size,for larger item more read capacity is required.
+
+1 write capacity unit
+1 write per second.
+for item uto 1 Kb, for larger item,more capacity unit is required.
+
+==Math time
+if u create a table with 10 reads and 10 writes capacity units, assuming 4kb item size for read and 1 kb item size for write,
+what should be the throughput (KB/second) for stongly consistent reads,writes?
+
+Answer:- 1 read capacity unit=1 strongly consistent read per sec for 4 kb
+10 read capcity unit=10 strong consistent read/ sec for 4 kb each=40KB/sec 
+similary for write, 1KB*10 capcity units=10KB/sec
+
+*************Dynamo db streams
+an optonal feture that captures data modification events in dynamodb tables.The data about these events appear in the strem in
+near real time, and in the order that events occured.
+
+Events tht triiger the steam recod:
+1) A new item is added to the table
+2)AN item is updated.
+3)AN item is delete from the table.
+
+
+**********AWS AURORA RDS Serverless
+only pay for what u use
 
 
 
