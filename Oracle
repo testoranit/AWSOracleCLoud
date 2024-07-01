@@ -145,7 +145,10 @@ upto 5 read replicas (croos az-cross-region)
 Once a read replica is promoted it's no longer a read replica its relathinship with primary db is broken.
 so now db can go for certain data in the original master and certain data in the new master which is now an independent db.This is called sharding.
 
-Automatic backup required is a pre-req for read replicas
+Automatic backup required must be enabled on primary is a pre-req for read replicas.
+Multi-AZ Deployment:
+
+For PostgreSQL and Oracle, read replicas can be created from a Multi-AZ deployment. For MySQL and MariaDB, you can create read replicas from both single-AZ and Multi-AZ instances.
 
 u can setup multi az read replicas(just like multi az rds)
 Master read replica in 1 region and standby read replica in another region both having the same DNS.
